@@ -1,0 +1,21 @@
+name: Check HTTP Status Code
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  check_status_code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check HTTP Status Code
+        run: |
+          status_code=$(curl -L -s -o /dev/null -w "%{http_code}" http://www.juntekim.com)
+          if [ "$status_code" -ne 200 ]; then
+            echo "The website returned status code $status_code"
+            exit 1
+          else
+            echo "The website returned status code 200"
+          fi
