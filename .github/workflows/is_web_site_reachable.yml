@@ -1,4 +1,4 @@
-name: Check HTTP Status Code
+name: Check HTTP Status Code and Public IP
 
 on:
   schedule:
@@ -6,16 +6,17 @@ on:
   workflow_dispatch:
 
 jobs:
-  check_status_code:
-    runs-on: ubuntu-latest
+  check_public_ip:
+    runs-on: self-hosted  # This job will run on a self-hosted runner
 
     steps:
-      - name: Check HTTP Status Code
+      - name: Check Public IP
         run: |
-          status_code=$(curl -L -s -o /dev/null -w "%{http_code}" http://www.juntekim.com)
-          if [ "$status_code" -ne 200 ]; then
-            echo "The website returned status code $status_code"
-            exit 1
+          EXPECTED_IP="81.97.23.124"
+          CURRENT_IP=$(curl -s ifconfig.me)
+          if [ "$CURRENT_IP" == "$EXPECTED_IP" ]; then
+              echo "Public IP is still $CURRENT_IP."
           else
-            echo "The website returned status code 200"
+              echo "The public IP has changed. Current IP: $CURRENT_IP."
+              exit 1
           fi
