@@ -19,3 +19,32 @@ jobs:
           else
             echo "The website returned status code 200"
           fi
+      
+      - name: Check HTTP Status Code and Redirect for /newsletter
+        run: |
+          final_url=$(curl -Ls -o /dev/null -w "%{url_effective}" http://www.juntekim.com/newsletter)
+          status_code=$(curl -Ls -o /dev/null -w "%{http_code}" http://www.juntekim.com/newsletter)
+          
+          if [ "$status_code" -ne 200 ]; then
+            echo "The /newsletter endpoint returned status code $status_code"
+            exit 1
+          elif [ "$final_url" != "http://www.juntekim.com/newsletter" ]; then
+            echo "The final redirected URL was $final_url instead of http://www.juntekim.com/newsletter"
+            exit 1
+          else
+            echo "The /newsletter endpoint returned status code 200 and the final URL was correct"
+          fi
+
+      - name: Check HTTP Status Code and Redirect for /ynab_calls
+        run: |
+          final_url=$(curl -Ls -o /dev/null -w "%{url_effective}" http://www.juntekim.com/ynab_calls)
+          status_code=$(curl -Ls -o /dev/null -w "%{http_code}" http://www.juntekim.com/ynab_calls)
+          
+          if [ "$status_code" -ne 200 ]; then
+            echo "The /ynab_calls endpoint returned status code $status_code"
+            exit 1
+          elif [ "$final_url" != "http://www.juntekim.com/ynab_calls" ]; then
+            echo "The final redirected URL was $final_url instead of http://www.juntekim.com/ynab_calls"
+            exit 1
+          else
+            echo "The /ynab_calls endpoint returned status code 200 and the final URL was correct"
