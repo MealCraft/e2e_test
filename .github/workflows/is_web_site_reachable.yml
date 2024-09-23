@@ -51,3 +51,5 @@ jobs:
             exit 1
           else
             echo "The /ynab_calls endpoint returned status code 200 and the final URL was correct"
+          fi
+
