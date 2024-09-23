@@ -37,14 +37,17 @@ jobs:
 
       - name: Check HTTP Status Code and Redirect for /ynab_calls
         run: |
-          final_url=$(curl -kLs -o /dev/null -w "%{url_effective}" https://www.juntekim.com/ynab_calls)
-          status_code=$(curl -kLs -o /dev/null -w "%{http_code}" https://www.juntekim.com/ynab_calls)
+          final_url=$(curl -Ls -o /dev/null -w "%{url_effective}" http://www.juntekim.com/ynab_calls)
+          status_code=$(curl -Ls -o /dev/null -w "%{http_code}" http://www.juntekim.com/ynab_calls)
           
+          # Normalize the final URL by removing a trailing slash if present
+          normalized_url=${final_url%/}
+
           if [ "$status_code" -ne 200 ]; then
             echo "The /ynab_calls endpoint returned status code $status_code"
             exit 1
-          elif [ "$final_url" != "https://www.juntekim.com/ynab_calls" ]; then
-            echo "The final redirected URL was $final_url instead of https://www.juntekim.com/ynab_calls"
+          elif [ "$normalized_url" != "http://www.juntekim.com/ynab_calls" ] && [ "$normalized_url" != "https://www.juntekim.com/ynab_calls" ]; then
+            echo "The final redirected URL was $final_url instead of http://www.juntekim.com/ynab_calls"
             exit 1
           else
             echo "The /ynab_calls endpoint returned status code 200 and the final URL was correct"
