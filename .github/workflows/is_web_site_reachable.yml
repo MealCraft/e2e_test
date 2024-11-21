@@ -32,7 +32,7 @@ jobs:
 
       - name: Check HTTP Status Code
         run: |
-          status_code=$(curl -kL -s -o /dev/null -w "%{http_code}" https://www.app.recallplanner.com)
+          status_code=$(curl -kL -s -o /dev/null -w "%{http_code}" https://app.recallplanner.com)
           if [ "$status_code" -ne 200 ]; then
             echo "The website returned status code $status_code"
             exit 1
