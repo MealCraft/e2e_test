@@ -19,6 +19,26 @@ jobs:
           else
             echo "The website returned status code 200"
           fi
+
+      - name: Check HTTP Status Code
+        run: |
+          status_code=$(curl -kL -s -o /dev/null -w "%{http_code}" https://www.recallplanner.com)
+          if [ "$status_code" -ne 200 ]; then
+            echo "The website returned status code $status_code"
+            exit 1
+          else
+            echo "The website returned status code 200"
+          fi
+
+      - name: Check HTTP Status Code
+        run: |
+          status_code=$(curl -kL -s -o /dev/null -w "%{http_code}" https://www.app.recallplanner.com)
+          if [ "$status_code" -ne 200 ]; then
+            echo "The website returned status code $status_code"
+            exit 1
+          else
+            echo "The website returned status code 200"
+          fi
       
       - name: Check HTTP Status Code and Redirect for /newsletter
         run: |
